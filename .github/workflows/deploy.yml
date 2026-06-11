@@ -19,15 +19,20 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+      - name: Debug SSH Key
+        run: |
+          ls -la ~/.ssh
+          head -1 ~/.ssh/id_rsa
+          tail -1 ~/.ssh/id_rsa
 
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no \
           ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
 
-            cd django-deployment-poc
+            cd django-deployment-pocc
 
             git pull origin main
 
